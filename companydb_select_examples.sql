@@ -6,8 +6,6 @@ from employee;
 select fname as "First Name", lname as "Last Name"
 from employee;
 
-
-
 -- 1. Retrieve details of all male employees who draw a salary which is at least 30000
 select *
 from employee
@@ -19,9 +17,11 @@ from dependent
 where essn = '333445555';
 
 -- 3. Retrieve details of projects that are based out Houston or Stafford
+select * from project where plocation='Houston' OR plocation='Stafford';
 
 -- 4. Retrieve details of projects that are based out Houston or belongs
 --    to deptartment 4
+select * from project where plocation='Houston' AND dnum=4;
 
 -- 5. Display the name of the department and the year in which the manager
 --    was appointed 
@@ -33,6 +33,8 @@ from department;
 
 -- 6. Display the SSN of all employees who live in Houston
 --    (Hint: use LIKE() function as in address LIKE '%Houston'
+select ssn from employee where address LIKE '%Houston%';
+
 -- 6. Display employees whose name begins with J
 
 select fname
@@ -40,6 +42,7 @@ from employee
 where fname like 'J%';
 
 -- 7. Display details of all (male employee who earn more than 30000) or female employees who earn less than 30000)
+select * from employee where (sex='M' AND salary>30000) OR (sex='F' AND salary<30000);
 
 -- 8. Display the essn of employees who have worked betwen 25 and 50 hours
 --      a) Use AND clause
@@ -65,11 +68,11 @@ where dlocation in ('Houston','Stafford');
 -- 10. Display the names of the project that are neither based out of houston nor out of stafford
 --      a) Use AND/OR clause
 --      b) use NOT IN clause as in Plocation NOT IN ('Houston','Stafford')
-
-
+select pname from project where plocation != 'Houston' AND plocation != 'Stafford';
+select pname from project where plocation NOT IN ('Houston', 'Stafford');
 -- 11. Display the ssn and fully concatenated name of all employees
 -- 	Use CONCAT function as in CONCAT(fname, ' ', minit, ' ', lname)
-
+select ssn, CONCAT(fname,' ',minit,' ',lname) "Full Name" from employee;
 
 -- 12. Display the employee details who does not have supervisor
 -- 	Use IS NULL as in super_ssn IS NULL
@@ -85,8 +88,7 @@ where dno = 5
 order by salary asc;
 
 -- 14. Sort the works_on table based on Pno and Hours
-
-
+select * from works_on ORDER BY pno, hours;
 
 -- 15. Display the average project hours 
 
@@ -109,15 +111,16 @@ from employee;
 
 -- 17. What is the average salary of employees who do not have a manager
 
-
+select avg(salary) from employee where super_ssn is null GROUP BY super_ssn;
 
 
 -- 18. What is the highest salary of female employees
-
+select MAX(salary) from employee where sex = 'F';
 
 
 -- 19. What is the least salary of male employees
 
+select MIN(salary) from employee where sex = 'M';
 
 
 -- 20. Display the number of employees in each department
@@ -127,17 +130,10 @@ from employee
 group by dno;
 
 
-
-
-
 select dno, count(*) as "Number of employees"
 from employee
 group by dno
 order by dno;
-
-
-
-
 
 
 -- 21. Display the average salary of employees (department-wise and gender-wise)
@@ -148,9 +144,9 @@ from employee
 where super_ssn = '333445555'
 group by dno, sex;
 
-
 -- 22. Display the number of male employees in each department
 
+select dno, count(dno) from employee GROUP BY dno;
 -- 23. Display the average, minimum, maximum hours spent in each project
 
 select pno, avg(hours), min(hours), max(hours)
@@ -167,12 +163,13 @@ order by extract(year from bdate);
 
 -- 25. Dipslay the number of projects each employee is working on
 
+select pno, count(essn) from works_on GROUP BY pno;
+
 -- 26. Display the Dno of those departments that has at least 3 employees
 select dno, count(*)
 from employee
 group by dno
 having count(*) >= 3;
-
 
 
 
