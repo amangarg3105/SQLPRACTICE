@@ -1,0 +1,13 @@
+Draw ER Diagram First
+
+
+     1. Create TVNetwork 
+      
+      2. Create tv series
+
+      3.  Create Actors 
+
+
+3.  A tvnetwork can have multiple tv series
+
+4.  TVSeries can have many actors and many actors can work on many tv series
