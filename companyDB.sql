@@ -1,4 +1,4 @@
-﻿
+
 create table employee(
 	fname varchar(30),
 	minit char(1),
