@@ -19,9 +19,15 @@ from dependent
 where essn = '333445555';
 
 -- 3. Retrieve details of projects that are based out Houston or Stafford
+select *
+from project
+where plocation In ('Houston','Stafford');
 
 -- 4. Retrieve details of projects that are based out Houston or belongs
 --    to deptartment 4
+select *
+from project
+where plocation In ('Houston') or dnum=4;
 
 -- 5. Display the name of the department and the year in which the manager
 --    was appointed 
@@ -33,6 +39,11 @@ from department;
 
 -- 6. Display the SSN of all employees who live in Houston
 --    (Hint: use LIKE() function as in address LIKE '%Houston'
+
+select ssn
+from employee
+where address like '%Houston%';
+
 -- 6. Display employees whose name begins with J
 
 select fname
@@ -40,6 +51,11 @@ from employee
 where fname like 'J%';
 
 -- 7. Display details of all (male employee who earn more than 30000) or female employees who earn less than 30000)
+select * from employee;
+
+select *
+from employee
+where (sex = 'M' and salary>30000) or (sex = 'F' and salary<30000);
 
 -- 8. Display the essn of employees who have worked betwen 25 and 50 hours
 --      a) Use AND clause
@@ -54,7 +70,6 @@ from works_on
 where hours between 25 and 30;
 
 
-
 -- 9. Display the names of projects that are based out of houston or stafford
 --      a) Use OR clause
 --      b) Use IN clause as in Plocation in ('Houston', 'Stafford')
@@ -62,19 +77,35 @@ where hours between 25 and 30;
 select * from dept_locations
 where dlocation in ('Houston','Stafford');
 
+select * from dept_locations 
+where dlocation='Houston' or dlocation='Stafford';
+
 -- 10. Display the names of the project that are neither based out of houston nor out of stafford
 --      a) Use AND/OR clause
 --      b) use NOT IN clause as in Plocation NOT IN ('Houston','Stafford')
+
+select *
+from project
+where plocation not in ('Houston','Stafford');
+
+select * 
+from project 
+where plocation <> 'Houston' and plocation <> 'Stafford';
 
 
 -- 11. Display the ssn and fully concatenated name of all employees
 -- 	Use CONCAT function as in CONCAT(fname, ' ', minit, ' ', lname)
 
+select ssn,concat(fname,' ',minit,' ',lname)
+from employee;
 
 -- 12. Display the employee details who does not have supervisor
 -- 	Use IS NULL as in super_ssn IS NULL
 
-select * from employee where super_ssn is null;
+select *
+from employee
+where super_ssn IS null;
+
 
 -- 13. Display the ssn of employees sorted by their salary in ascending mode
 -- 	Use ORDER by SALARY
@@ -86,15 +117,13 @@ order by salary asc;
 
 -- 14. Sort the works_on table based on Pno and Hours
 
+select * from works_on order by pno,hours;
 
 
 -- 15. Display the average project hours 
 
 select avg(hours) as "Average Hours"--do not use single quotes here
 from works_on;
-
-
-
 
 -- 16. Display the number of employees who do not have a manager
 
@@ -105,20 +134,21 @@ where super_ssn IS NULL;
 select count(super_ssn)
 from employee;
 
-
-
 -- 17. What is the average salary of employees who do not have a manager
-
-
-
+select avg(salary)
+from employee
+where super_ssn is NULL;
 
 -- 18. What is the highest salary of female employees
 
-
+select max(salary) 
+from employee 
+where sex = 'F';
 
 -- 19. What is the least salary of male employees
-
-
+select min(salary)
+from employee
+where sex='M';
 
 -- 20. Display the number of employees in each department
 
@@ -126,19 +156,10 @@ select dno, count(*) as "Number of employees"
 from employee
 group by dno;
 
-
-
-
-
 select dno, count(*) as "Number of employees"
 from employee
 group by dno
 order by dno;
-
-
-
-
-
 
 -- 21. Display the average salary of employees (department-wise and gender-wise)
 -- 	GROUP BY Dno, Sex
@@ -150,6 +171,10 @@ group by dno, sex;
 
 
 -- 22. Display the number of male employees in each department
+
+select dno,count(*)
+from employee
+group by dno;
 
 -- 23. Display the average, minimum, maximum hours spent in each project
 
@@ -166,17 +191,15 @@ group by extract(year from bdate)
 order by extract(year from bdate);
 
 -- 25. Dipslay the number of projects each employee is working on
+select essn,count(pno)
+from works_on
+group by essn;
 
 -- 26. Display the Dno of those departments that has at least 3 employees
 select dno, count(*)
 from employee
 group by dno
 having count(*) >= 3;
-
-
-
-
-
 
 -- 27. Among the people who draw at least 30000 salary, what is the department-wise average?
 
@@ -202,6 +225,15 @@ where salary >= (select avg(salary) from employee);
 
 --INSERT
 
+select * from dependent;
+insert into dependent values('333445555','James','M','1989-04-05','Son');
+
 --DELETE
 
+delete from dependent 
+where dependent_name = 'Joy';
+
 --UPDATE
+update dependent 
+set dependent_name = 'George' 
+where dependent_name = 'James';
